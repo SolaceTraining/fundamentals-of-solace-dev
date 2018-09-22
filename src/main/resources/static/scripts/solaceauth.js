@@ -11,7 +11,7 @@
 function authenticate(sUsername, sPassword, oResultCallback) {
     'use strict';
 
-    var serverUrl = 'http://localhost:8081/solace/cloud/proxy',
+    var serverUrl = '/solace/cloud/proxy',
         jsonBody = {
             username: sUsername,
             password: sPassword
@@ -19,8 +19,10 @@ function authenticate(sUsername, sPassword, oResultCallback) {
 
     fetch(serverUrl, {
         method: "POST",
-        mode: "cors",
-        cache: "no-cache",
+        headers: {
+            'Accept': 'application/json, text/plain, */*',
+            'Content-Type': 'application/json'
+          },
         body: JSON.stringify(jsonBody)
     })
         .then(function (response) {

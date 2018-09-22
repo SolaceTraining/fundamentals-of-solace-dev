@@ -22,6 +22,7 @@ class PubSubPlusBroker {
     this.sPASSWORD = "";
     this.sPublishTopic = "";
     this.sSubscribeTopic = "";
+    this.sReceiveQueue = "";
 
     /*Topic Subscriber Parameters*/
     this.BLOCK_SUBSCRIBER_TIMEOUT_MS = 10000;
@@ -42,7 +43,7 @@ class PubSubPlusBroker {
     solace.SolclientFactory.setLogLevel(solace.LogLevel.DEBUG);
   }
 
-  
+
 
   /**
    * * Uses a Solace PubSub+ topic to authenticate against a backend RESTful
@@ -227,6 +228,60 @@ class PubSubPlusBroker {
   }
 
 
+  /**
+   * Consumes from a given queue on the broker
+   * @callback oResultCallback
+   *
+   * @param {oResultCallback} oResultCallback - Callback function used to handle the result
+   * @returns Nothing
+   */
+  consume(oResultCallback) {
+
+    //ensure that we have a session to play with
+    if (this.broker.session === null) {
+      oResultCallback(false, "No session! You're probably not connected to the broker.");
+    } else {
+
+      /*This block establishes our consumer.
+       *We defer actually recieving the message to the event
+       *handler designated for that purpose.
+       */
+      this.messageConsumer = this.broker.session.createMessageConsumer({
+        // solace.MessageConsumerProperties
+        queueDescriptor: {
+          name: this.sReceiveQueue,
+          type: solace.QueueType.QUEUE
+        },
+
+        //enable auto-acknowledgement so that messages are read off the queue immediately
+        acknowledgeMode: solace.MessageConsumerAcknowledgeMode.AUTO,
+      });
+      try {
+        this.messageConsumer.connect()
+      } catch (error) {
+        console.error("Could not connect to queue. ->" + error.message);
+      }
+    }
+
+    /*
+     *Rescope our callback and topic so we can use them
+     *inside our event handler lambda, below.
+     */
+    var oResultCallback = oResultCallback;
+    var sQueue = this.sReceiveQueue;
+
+    //What to do when subscription succeeds
+    this.messageConsumer.on(solace.MessageConsumerEventName.UP, () => {
+      oResultCallback(true, "Successfully connected to " + sQueue);
+      console.debug("Successfully connected to " + sQueue);
+    });
+
+    //What to do when a sub fails
+    this.messageConsumer.on(solace.MessageConsumerEventName.CONNECT_FAILED_ERROR, () => {
+      oResultCallback(false, "Could not subscribe to " + sQueue);
+      console.debug("Failed to connect to " + sQueue);
+    });
+  }
 
 
   /**
@@ -254,6 +309,29 @@ class PubSubPlusBroker {
   }
 
 
+  /**
+   * Consumes messages from a queue and returns them to the caller using
+   * the provided callback function.
+   *
+   * @callback oResultCallback
+   *
+   * @param {oResultCallback} oResultCallback - Callback function used to handle the result
+   */
+  onQueueMessage(oResultCallback) {
 
+    //rescope our callback for use in the lambda
+    var oResultCallback = oResultCallback;
+
+    console.debug(this.messageConsumer);
+
+    //register a lambda for when we receive a message.
+    this.messageConsumer.on(solace.MessageConsumerEventName.MESSAGE, (sMessage) => {
+
+      //assign the message to our callback for use by the caller.
+      //We dump a more detailed format of the message to the debug log
+      oResultCallback(sMessage.getBinaryAttachment());
+      console.debug(sMessage.dump());
+    });
+  }
 
 } //End class

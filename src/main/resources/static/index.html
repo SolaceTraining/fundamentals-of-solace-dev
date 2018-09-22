@@ -10,10 +10,63 @@
   <script src="lib/solclientjs-10.1.0/lib/solclient.js"></script>
   <script src="scripts/pubsubplusbroker.js"></script>
   <script src="scripts/ui-handler.js"></script>
+  <script src="scripts/solaceauth.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $("#chat-area").hide();
+     function authResult(bResult){
+
+       if(bResult){
+         $("#chat-area").show();
+         $("#login-area").hide();
+       }else{
+         //create an empty div to be used for alerting
+         //assign it our alert message
+         var $div = $("<div></div>");
+         $div.text("Login Failed");
+         $div.addClass("alert alert-danger");
+         //add in our alert and have it fade out
+         //in 5s.
+         $("#alerts").append($div);
+         $div.fadeOut(5000);
+       }
+     }
+    $("#btnLogin").click(function() {
+         var sUsername=$("#username").val();
+         var sPassword=$("#password").val();
+         authenticate(sUsername,sPassword,authResult);
+    })
+    });
+  </script>
 </head>
 
 <body class="bg-secondary">
-  <div class="container pt-5" id="chat-area">
+
+<div id="login-area">
+<div class=" w-25 mx-auto border-0">
+  <img src="resources/Solace_Logo_Green_360x100.png" class="rounded pb-3" width="30%" height="30%"/>
+</div>
+<div class="card w-25 mx-auto">
+  <div class="card-header text-center">
+    Login
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username"placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password">
+      </div>
+      <button type="button" id="btnLogin" class="btn btn-primary float-right">Submit</button>
+    </form>
+  </div>
+</div>
+</div>
+  <div class="container pt-5" id="chat-area" >
     <img src="resources/Solace_Logo_Green_360x100.png" class="rounded pb-3" width="10%" height="10%"/>
     <form>
       <div class="form-group">
@@ -28,9 +81,9 @@
         </div>
       </div>
     </form>
-    <div id="alerts">
-    </div>
   </div>
+<div id="alerts">
+</div>
 </body>
 
 </html>

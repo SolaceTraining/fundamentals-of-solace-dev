@@ -26,3 +26,5 @@
 
 ###solace libs
 src/main/resources/static/lib/
+src/main/resources/static/resources/application-properties.js
+src/main/resources/application.properties

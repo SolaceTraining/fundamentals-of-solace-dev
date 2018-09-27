@@ -15,14 +15,14 @@ class PubSubPlusBroker {
    */
   constructor() {
 
-    /**INITIALIZE YOUR BROKER PARAMETERS HERE**/
-    this.sBROKERURL = "";
-    this.sVPN = "";
-    this.sUSERNAME = "";
-    this.sPASSWORD = "";
-    this.sPublishTopic = "";
-    this.sSubscribeTopic = "";
-    this.sReceiveQueue = "";
+	/*Retrieve Broker Parameters from config file*/
+    this.sBROKERURL = connectOptions.sBROKERURL;
+    this.sVPN = connectOptions.sVPN;
+    this.sUSERNAME = connectOptions.sUSERNAME;
+    this.sPASSWORD = connectOptions.sPASSWORD;
+    this.sPublishTopic = connectOptions.sPublishTopic;
+    this.sSubscribeTopic = connectOptions.sSubscribeTopic;
+    this.sReceiveQueue = connectOptions.sReceiveQueue;
 
     /*Topic Subscriber Parameters*/
     this.BLOCK_SUBSCRIBER_TIMEOUT_MS = 10000;

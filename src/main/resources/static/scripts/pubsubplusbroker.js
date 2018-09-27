@@ -22,6 +22,7 @@ class PubSubPlusBroker {
     this.sPASSWORD = connectOptions.sPASSWORD;
     this.sPublishTopic = connectOptions.sPublishTopic;
     this.sSubscribeTopic = connectOptions.sSubscribeTopic;
+	this.sReceiveQueue = connectOptions.sReceiveQueue;
 
     /*Topic Subscriber Parameters*/
     this.BLOCK_SUBSCRIBER_TIMEOUT_MS = 10000;

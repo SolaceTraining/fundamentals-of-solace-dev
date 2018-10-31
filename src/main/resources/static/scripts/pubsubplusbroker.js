@@ -22,7 +22,7 @@ class PubSubPlusBroker {
     this.sPASSWORD = connectOptions.sPASSWORD;
     this.sPublishTopic = connectOptions.sPublishTopic;
     this.sSubscribeTopic = connectOptions.sSubscribeTopic;
-	this.sReceiveQueue = connectOptions.sReceiveQueue;
+	  this.sReceiveQueue = connectOptions.sReceiveQueue;
 
     /*Topic Subscriber Parameters*/
     this.BLOCK_SUBSCRIBER_TIMEOUT_MS = 10000;
@@ -248,16 +248,11 @@ class PubSubPlusBroker {
        */
       this.messageConsumer = this.broker.session.createMessageConsumer({
         // solace.MessageConsumerProperties
-        queueDescriptor: {
-          name: this.sReceiveQueue,
-          type: solace.QueueType.QUEUE
-        },
 
         //enable auto-acknowledgement so that messages are read off the queue immediately
-        acknowledgeMode: solace.MessageConsumerAcknowledgeMode.AUTO,
       });
       try {
-        this.messageConsumer.connect()
+        
       } catch (error) {
         console.error("Could not connect to queue. ->" + error.message);
       }

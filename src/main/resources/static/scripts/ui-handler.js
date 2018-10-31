@@ -54,6 +54,16 @@ $(document).ready(function() {
   }
 
 
+  $('#chatInput').keypress(function (e) {
+    var key = e.which;
+    if(key == 13)  // the enter key code
+     {
+       $('#buttonSend').click();
+       return false;  
+     }
+   });
+
+
   /***EVENT HANDLERS***/
   /*
    *Called when a user sends a message

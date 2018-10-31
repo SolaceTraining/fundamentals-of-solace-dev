@@ -53,14 +53,6 @@ $(document).ready(function() {
     return;
   }
 
-  $('#chatInput').keypress(function (e) {
-    var key = e.which;
-    if(key == 13)  // the enter key code
-     {
-       $('#buttonSend').click();
-       return false;  
-     }
-   });
 
   /***EVENT HANDLERS***/
   /*
@@ -70,18 +62,25 @@ $(document).ready(function() {
     console.debug("Caught send button event");
 
     //the text that the user just typed.
-    var sChatText = $("#chatUser").val() + ":" + $("#chatInput").val();
+    var sChatText = $("#chatInput").val();
 
     console.debug(sChatText);
 
     //attempt a publish to the broker topic
     broker.publish(sChatText, alertHandler)
+    updateChatArea("me: " + sChatText);
 
     //reset the text input box
     $("#chatInput").val("");
   })
 
 
+  /***HELPER METHODS***/
+  //updates the chat window with new text
+  function updateChatArea(sText) {
+    var sCurrentText = $("#chatArea").val() + "\n" + sText;
+    $("#chatArea").val(sCurrentText);
+  }
 
 
   //get an instance of our broker

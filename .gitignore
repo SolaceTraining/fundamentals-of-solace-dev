@@ -12,6 +12,7 @@
 .sts4-cache
 
 ### vs-code ###
+.vscode
 bin
 
 ### IntelliJ IDEA ###

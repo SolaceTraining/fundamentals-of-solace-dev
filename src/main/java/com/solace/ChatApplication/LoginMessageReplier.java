@@ -7,15 +7,25 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * The LoginMessageReplier class is responsible for receiving a Login message and validating whether
+ * the credentials match against an internal repository
+ * @author Thomas Kunnumpurath
+ */
+
 @Service
 public class LoginMessageReplier {
 
+    //A Solace Message Publisher
     XMLMessageProducer producer;
+    //A Solace Message Listener
     XMLMessageConsumer consumer;
 
+    //A repository that is able to validate against a username and password
     @Autowired
     ICredentialsRepository credentialsRepository;
 
+    //The solace specific properties are defined within application.properties
     @Value("${solace.host}")
     private String solaceHost;
 
@@ -28,8 +38,10 @@ public class LoginMessageReplier {
     @Value("${solace.vpn}")
     private String solaceVpn;
 
+    //A Solace session object
     private JCSMPSession session;
 
+    //The Topic that the Login Message will be sent on
     private static String REQUEST_TOPIC = "LOGIN/MESSAGE/REQUEST";
 
     @PostConstruct
@@ -79,9 +91,13 @@ public class LoginMessageReplier {
         }
     }
 
-    
+    /**
+     * The LoginRequestHandler class is responsible for implementing the reply to a LoginRequest
+     * @author Thomas Kunnumpurath
+     */
     class LoginRequestHandler implements XMLMessageListener {
 
+        // Function to reply to a LoginRequestMessage
         private XMLMessage createReplyMessage(BytesXMLMessage request) throws JCSMPException {
             return null;
         }
@@ -90,6 +106,7 @@ public class LoginMessageReplier {
         private void sendReply(XMLMessage request, XMLMessage reply) throws JCSMPException {
         }
 
+        //Action to take when receiving a message
         public void onReceive(BytesXMLMessage message) {
         }
 
@@ -99,6 +116,10 @@ public class LoginMessageReplier {
 
     }
 
+    /**
+     * A class that implements a simple callback that will print the response
+     * @author Thomas Kunnumpurath
+     */
     class PrintingPubCallback implements JCSMPStreamingPublishEventHandler {
         public void handleError(String messageID, JCSMPException cause, long timestamp) {
                }

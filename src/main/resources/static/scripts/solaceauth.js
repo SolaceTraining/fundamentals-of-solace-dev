@@ -19,8 +19,6 @@ function authenticate(sUsername, sPassword, oResultCallback) {
 
     fetch(serverUrl, {
         method: "POST",
-        mode: "cors",
-        cache: "no-cache",
         body: JSON.stringify(jsonBody)
     })
         .then(function (response) {

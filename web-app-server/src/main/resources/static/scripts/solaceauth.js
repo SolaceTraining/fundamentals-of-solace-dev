@@ -11,7 +11,7 @@
 function authenticate(sUsername, sPassword, oResultCallback) {
     'use strict';
 
-    var serverUrl = 'http://localhost:8081/solace/cloud/proxy',
+    var serverUrl = 'http://localhost:8082/solace/cloud/proxy',
         jsonBody = {
             username: sUsername,
             password: sPassword

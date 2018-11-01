@@ -1,12 +1,5 @@
-# Solace Chat Application Web Server
-This project use Spring-Boot to start up a WebServer and contains a skeleton web app for chat. 
+# Introducing a login-server
 
-Download the solclientjs javascript libraries from http://dev.solace.com and place it under src/main/resources/static/lib
+In this section, we are introducing a login-server that handles login requests from the UI.
 
-To run the web-server, type the following command:
-
-```
-mvn spring-boot:run
-```
-
-Navigate to http://localhost:8081/ to bring up the chat application
+The WebApp Server is now moved to the web-app-server folder and the Login Server will be created under the login-server folder.

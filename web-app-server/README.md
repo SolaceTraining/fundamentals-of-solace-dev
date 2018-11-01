@@ -1,7 +1,9 @@
 # Solace Chat Application Web Server
-This project use Spring-Boot to start up a WebServer and contains a skeleton web app for chat. 
+This project use Spring-Boot to start up a WebServer and contains a web app for chat.
 
-Download the solclientjs javascript libraries from http://dev.solace.com and place it under src/main/resources/static/lib
+The web-app is hosted under \src\main\resources\static\
+
+The Spring Boot server side code is hosted under \src\main\java\
 
 To run the web-server, type the following command:
 

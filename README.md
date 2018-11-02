@@ -1,4 +1,4 @@
-# Introducing a login-server
+# Introducing an auth-server
 
 In this section, we are introducing an Authorization Server that handles auth requests from the UI.
 

@@ -51,9 +51,6 @@ public class SolaceCloudProxy {
                     auth.getBytes(Charset.forName("US-ASCII")));
             String authHeader = "Basic " + new String(encodedAuth);
             set("Authorization", authHeader);
-            
-            //This header determines that the Http Request needs a response
-            set("Solace-Reply-Wait-Time-In-ms", "3000");
             set("Content-Type","application/json");
         }};
     }
@@ -65,15 +62,7 @@ public class SolaceCloudProxy {
 
         RestTemplate restTemplate = new RestTemplate();
         HttpEntity<UserObject> request = new HttpEntity<UserObject>(userObject, httpHeaders);
-
-        //The result of the request is an authenticated object
-        AuthenticatedObject authenticatedObject = restTemplate.postForObject(solaceRESTHost + "/LOGIN/MESSAGE/REQUEST", request, AuthenticatedObject.class);
-
-        //Pass through a response code based on the result of the REST-ful request
-        if (authenticatedObject.isAuthenticated()) {
-            return new ResponseEntity(HttpStatus.OK);
-        } else {
-            return new ResponseEntity(HttpStatus.FORBIDDEN);
-        }
+        restTemplate.postForObject(solaceRESTHost + "/LOGIN/MESSAGE/REQUEST", request, AuthenticatedObject.class);
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -3,13 +3,13 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.solace</groupId>
-    <artifactId>ChatApplication</artifactId>
+    <groupId>com.solace.chat.application.auth.server</groupId>
+    <artifactId>auth-server</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>ChatApplication</name>
-    <description>Demo project for Spring Boot</description>
+    <name>Auth Server</name>
+    <description>Authorization Server implementation for ChatApplication</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -17,12 +17,6 @@
         <version>2.0.4.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <java.version>1.8</java.version>
-    </properties>
 
     <dependencies>
         <dependency>
@@ -47,6 +41,12 @@
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.solace.chat.application.common</groupId>
+            <artifactId>solace-chat-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

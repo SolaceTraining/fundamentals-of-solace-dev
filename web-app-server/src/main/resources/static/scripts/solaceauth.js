@@ -20,9 +20,8 @@ function authenticate(sUsername, sPassword, oResultCallback) {
     fetch(serverUrl, {
         method: "POST",
         headers: {
-            'Accept': 'application/json, text/plain, */*',
-            'Content-Type': 'application/json'
-          },
+            "Content-Type": "application/json; charset=utf-8",
+        },
         body: JSON.stringify(jsonBody)
     })
         .then(function (response) {

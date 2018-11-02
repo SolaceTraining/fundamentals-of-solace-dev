@@ -7,6 +7,7 @@
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
 
   <!--Internal Scripts -->
+  <script src="resources/application-properties.js"></script>
   <script src="lib/solclient.js"></script>
   <script src="scripts/pubsubplusbroker.js"></script>
   <script src="scripts/ui-handler.js"></script>
@@ -20,7 +21,9 @@
 
        if(bResult){
          $("#chat-area").show();
+         $("#chatUser").text($("#username").val());
          $("#login-area").hide();
+         connectToSolace();
        }else{
          //create an empty div to be used for alerting
          //assign it our alert message
@@ -75,7 +78,7 @@
           <textarea name="chatArea" class="form-control" id="chatArea" rows="15" disabled=true></textarea>
         </div>
         <div class="input-group mb-5">
-          <input type="text" class="form-control" id="chatInput" name="chatInput" placeholder="Enter your text here...">
+          <span id="chatUser"></span>:<input type="text" class="form-control" id="chatInput" name="chatInput" placeholder="Enter your text here...">
           <div class="input-group-append">
             <button class="btn btn-primary" type="button" id="buttonSend">&gt;</button>
           </div>

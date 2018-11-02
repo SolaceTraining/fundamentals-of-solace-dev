@@ -1,4 +1,4 @@
-package com.solace.ChatApplication;
+package com.solace.chat.application.auth.server;
 
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,11 @@
-/target/
-*/target/
+target/
+*/target
 !.mvn/wrapper/maven-wrapper.jar
 
 ### VSCode ###
 .vscode
-bin/
+bin
+*/bin
 
 ### STS ###
 .apt_generated

@@ -17,13 +17,13 @@ import javax.annotation.PostConstruct;
 public class LoginMessageReplier {
 
     //A Solace Message Publisher
-    XMLMessageProducer producer;
+    private XMLMessageProducer producer;
     //A Solace Message Listener
-    XMLMessageConsumer consumer;
+    private XMLMessageConsumer consumer;
 
-    //A repository that is able to validate against a username and password
+    //Implementation of the credentials repository 
     @Autowired
-    ICredentialsRepository credentialsRepository;
+    private ICredentialsRepository credentialsRepository;
 
     //The solace specific properties are defined within application.properties
     @Value("${solace.host}")
@@ -42,7 +42,7 @@ public class LoginMessageReplier {
     private JCSMPSession session;
 
     //The Topic that the Login Message will be sent on
-    private static String REQUEST_TOPIC = "LOGIN/MESSAGE/REQUEST";
+    private static final String REQUEST_TOPIC = "LOGIN/MESSAGE/REQUEST";
 
     @PostConstruct
     public void init() {

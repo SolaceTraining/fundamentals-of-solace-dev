@@ -11,16 +11,11 @@
 function authenticate(sUsername, sPassword, oResultCallback) {
     'use strict';
 
-    var serverUrl = 'http://localhost:8081/solace/cloud/proxy',
-        jsonBody = {
-            username: sUsername,
-            password: sPassword
-        };
+    // Enter serverUrl
+    var serverUrl = '', {};
 
-    fetch(serverUrl, {
-        method: "POST",
-        body: JSON.stringify(jsonBody)
-    })
+    // Complete fetch parameters
+    fetch(serverUrl, {})
         .then(function (response) {
             console.debug(response);
             if (response.ok) {

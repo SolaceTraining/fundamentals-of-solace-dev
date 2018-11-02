@@ -58,11 +58,8 @@ public class SolaceCloudProxy {
     //Function that makes a REST-ful call to Solace
     @RequestMapping(value = "/solace/cloud/proxy", method = RequestMethod.POST)
     @ResponseBody
-    public ResponseEntity LoginToSolaceCloud(@RequestBody UserObject userObject) {
-
-        RestTemplate restTemplate = new RestTemplate();
-        HttpEntity<UserObject> request = new HttpEntity<UserObject>(userObject, httpHeaders);
-        restTemplate.postForObject(solaceRESTHost + "/LOGIN/MESSAGE/REQUEST", request, AuthenticatedObject.class);
-        return new ResponseEntity(HttpStatus.OK);
+    public ResponseEntity SendLoginRequetOverSolace(@RequestBody UserObject userObject) {
+        //Rest Request goes here
+     
     }
 }

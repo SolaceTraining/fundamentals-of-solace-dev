@@ -1,4 +1,4 @@
-package com.solace.ChatApplication;
+package com.solace.chat.application.common;
 
 /**
  * AuthenticatedObject is a construct that is used to validate whether a user has been authenticated

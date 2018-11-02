@@ -1,11 +1,11 @@
-package com.solace.ChatApplication;
+package com.solace.chat.application.auth.server;
 
 import com.google.gson.Gson;
 import com.solacesystems.jcsmp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import com.solace.chat.application.common.*;
 import javax.annotation.PostConstruct;
 
 
@@ -85,7 +85,10 @@ public class LoginMessageReplier {
 
             session = JCSMPFactory.onlyInstance().createSession(properties);
             session.connect();
-
+            consumer = session.getMessageConsumer(new LoginRequestHandler());
+            producer = session.getMessageProducer(new PrintingPubCallback());
+            consumer.start();
+            session.addSubscription(JCSMPFactory.onlyInstance().createTopic(REQUEST_TOPIC), true);
         } catch (InvalidPropertiesException ipe) {
             System.err.println("Error during session creation: ");
             ipe.printStackTrace();

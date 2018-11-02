@@ -1,4 +1,4 @@
-package com.solace.ChatApplication;
+package com.solace.chat.application.common;
 
 /**
  * A UserObject which stores the credentials for user

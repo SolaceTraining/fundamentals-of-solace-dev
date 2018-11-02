@@ -1,4 +1,4 @@
-package com.solace.ChatApplication;
+package com.solace.chat.application.auth.server;
 
 /**
  * The ICredentialsRepository interface is a construct that houses the validation function

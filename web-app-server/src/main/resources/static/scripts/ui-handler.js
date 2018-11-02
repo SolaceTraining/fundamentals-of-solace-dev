@@ -1,9 +1,5 @@
-/**
- */
-$(document).ready(function() {
-
-  /***CALLBACK HANDLERS***/
-
+var broker = new PubSubPlusBroker();
+/***CALLBACK HANDLERS***/
   //alert handler
   function alertHandler(bResult, sMessage) {
 
@@ -37,9 +33,7 @@ $(document).ready(function() {
     if (bResult) {
       //we connected fine, now try and subscribe
       broker.subscribe(alertHandler);
-
-      broker.consume(alertHandler);
-      broker.onQueueMessage(messageHandler);
+      broker.onTopicMessage(messageHandler);
     }
 
     return;
@@ -48,40 +42,10 @@ $(document).ready(function() {
   //handles messages pulled from the broker
   function messageHandler(sMessage) {
     console.debug("message handler called with text: " + sMessage);
-    updateChatArea("Broker: " + sMessage);
+    updateChatArea(sMessage);
 
     return;
   }
-
-  $('#chatInput').keypress(function (e) {
-    var key = e.which;
-    if(key == 13)  // the enter key code
-     {
-       $('#buttonSend').click();
-       return false;  
-     }
-   });
-
-  /***EVENT HANDLERS***/
-  /*
-   *Called when a user sends a message
-   */
-  $("#buttonSend").click(function() {
-    console.debug("Caught send button event");
-
-    //the text that the user just typed.
-    var sChatText = $("#chatInput").val();
-
-    console.debug(sChatText);
-
-    //attempt a publish to the broker topic
-    broker.publish(sChatText, alertHandler)
-    updateChatArea("me: " + sChatText);
-
-    //reset the text input box
-    $("#chatInput").val("");
-  })
-
 
   /***HELPER METHODS***/
   //updates the chat window with new text
@@ -91,11 +55,41 @@ $(document).ready(function() {
   }
 
 
-  //get an instance of our broker
-  var broker = new PubSubPlusBroker();
+  function connectToSolace(){
 
   //try to connect
   broker.connect(connectHandler);
+  }
 
+   /***Button functions***/
+  $(document).ready(function() {
+    $('#chatInput').keypress(function (e) {
+      var key = e.which;
+      if(key == 13)  // the enter key code
+       {
+         $('#buttonSend').click();
+         return false;  
+       }
+     });
+  
+   
+    /*
+     *Called when a user sends a message
+     */
+    $("#buttonSend").click(function() {
+      console.debug("Caught send button event");
+  
+      //the text that the user just typed.
+      var sChatText = $("#chatUser").text() + ":" + $("#chatInput").val();
+  
+      console.debug(sChatText);
+  
+      //attempt a publish to the broker topic
+      broker.publish(sChatText, alertHandler)
+      
+  
+      //reset the text input box
+      $("#chatInput").val("");
+    })
+    });
 
-}) //end ready

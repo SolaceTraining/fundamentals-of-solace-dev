@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import javax.annotation.PostConstruct;
 import java.nio.charset.Charset;
@@ -59,6 +60,7 @@ public class SolaceCloudProxy {
     //Function that makes a REST-ful call to Solace
     @RequestMapping(value = "/solace/cloud/proxy", method = RequestMethod.POST)
     @ResponseBody
+    @CrossOrigin(origins = "http://localhost:8081")
     public ResponseEntity LoginToSolaceCloud(@RequestBody UserObject userObject) {
 
         RestTemplate restTemplate = new RestTemplate();

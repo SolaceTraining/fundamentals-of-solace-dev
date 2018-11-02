@@ -1,11 +1,13 @@
 package com.solace.ChatApplication;
 
+import com.google.gson.Gson;
 import com.solacesystems.jcsmp.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+
 
 /**
  * The LoginMessageReplier class is responsible for receiving a Login message and validating whether
@@ -20,6 +22,9 @@ public class LoginMessageReplier {
     private XMLMessageProducer producer;
     //A Solace Message Listener
     private XMLMessageConsumer consumer;
+
+    //Gson object for serializing/deserializing json objects
+    private Gson gson = new Gson();
 
     //Implementation of the credentials repository 
     @Autowired
@@ -97,21 +102,49 @@ public class LoginMessageReplier {
      */
     class LoginRequestHandler implements XMLMessageListener {
 
-        // Function to reply to a LoginRequestMessage
-        private XMLMessage createReplyMessage(BytesXMLMessage request) throws JCSMPException {
-            return null;
+        private XMLMessage createReplyMessage(TextMessage request) throws JCSMPException {
+            TextMessage replyMessage = JCSMPFactory.onlyInstance().createMessage(TextMessage.class);
+            //Convert the JSon to an Object
+            UserObject userObject = gson.fromJson(request.getText(), UserObject.class);
+
+            //Validate the user
+            boolean validUser = credentialsRepository.isValidUser(userObject.getUsername(), userObject.getPassword());
+            if (validUser)
+                System.out.println("Successfully validated a user");
+            else
+                System.out.println("Authentication failed");
+            replyMessage.setHTTPContentType("application/json");
+            replyMessage.setText("{\"authenticated\":\"" + validUser + "\"}");
+            replyMessage.setApplicationMessageId(request.getApplicationMessageId());
+            replyMessage.setDeliverToOne(true);
+            replyMessage.setDeliveryMode(DeliveryMode.DIRECT);
+            return replyMessage;
         }
 
         //Reply to a request
         private void sendReply(XMLMessage request, XMLMessage reply) throws JCSMPException {
+            producer.sendReply(request, reply);
         }
 
-        //Action to take when receiving a message
         public void onReceive(BytesXMLMessage message) {
+            System.out.println("Received a login request message, trying to parse it");
+
+            if (message instanceof TextMessage) {
+                TextMessage request = (TextMessage) message;
+                try {
+                    XMLMessage reply = createReplyMessage(request);
+                    sendReply(request, reply);
+                } catch (JCSMPException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                System.out.println("Failed to parse the request message, here's a message dump:" + message.toString());
+            }
         }
 
         @Override
         public void onException(JCSMPException e) {
+            System.out.println(e);
         }
 
     }
@@ -122,11 +155,14 @@ public class LoginMessageReplier {
      */
     class PrintingPubCallback implements JCSMPStreamingPublishEventHandler {
         public void handleError(String messageID, JCSMPException cause, long timestamp) {
-               }
+            System.err.println("Error occurred for message: " + messageID);
+            cause.printStackTrace();
+        }
 
         // This method is only invoked for persistent and non-persistent
         // messages.
         public void responseReceived(String messageID) {
+            System.out.println("Response received for message: " + messageID);
         }
     }
 }

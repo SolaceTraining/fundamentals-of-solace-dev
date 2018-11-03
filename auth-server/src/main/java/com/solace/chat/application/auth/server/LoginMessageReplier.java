@@ -46,8 +46,8 @@ public class LoginMessageReplier {
     //A Solace session object
     private JCSMPSession session;
 
-    //The Topic that the Login Message will be sent on
-    private static final String REQUEST_TOPIC = "LOGIN/MESSAGE/REQUEST";
+    //The name of the QUEUE to bind to
+    private static String QUEUE_NAME = "LOGIN_QUEUE";
 
     @PostConstruct
     public void init() {
@@ -85,10 +85,44 @@ public class LoginMessageReplier {
 
             session = JCSMPFactory.onlyInstance().createSession(properties);
             session.connect();
-            consumer = session.getMessageConsumer(new LoginRequestHandler());
             producer = session.getMessageProducer(new PrintingPubCallback());
-            consumer.start();
-            session.addSubscription(JCSMPFactory.onlyInstance().createTopic(REQUEST_TOPIC), true);
+
+            final EndpointProperties endpointProps = new EndpointProperties();
+            // set queue permissions to "consume" and access-type to "exclusive"
+            endpointProps.setPermission(EndpointProperties.PERMISSION_CONSUME);
+            endpointProps.setAccessType(EndpointProperties.ACCESSTYPE_NONEXCLUSIVE);
+
+            // create the queue object locally
+            final Queue queue = JCSMPFactory.onlyInstance().createQueue(QUEUE_NAME);
+            // Actually provision it, and do not fail if it already exists
+            session.provision(queue, endpointProps, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
+
+
+            System.out.printf("Attempting to bind to the queue '%s' on the PubSub+ Broker.%n", QUEUE_NAME);
+            // Create a Flow be able to bind to and consume messages from the Queue.
+            final ConsumerFlowProperties flow_prop = new ConsumerFlowProperties();
+            flow_prop.setEndpoint(queue);
+
+            // set to "auto acknowledge" where the API will ack back to Solace at the
+            // end of the message received callback
+            flow_prop.setAckMode(JCSMPProperties.SUPPORTED_MESSAGE_ACK_AUTO);
+            flow_prop.setActiveFlowIndication(true);
+
+            EndpointProperties endpoint_props = new EndpointProperties();
+            endpoint_props.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
+            // bind to the queue, passing null as message listener for no async callback
+            final FlowReceiver cons = session.createFlow( new LoginRequestHandler()
+                    , flow_prop, endpoint_props, new FlowEventHandler() {
+                        @Override
+                        public void handleEvent(Object o, FlowEventArgs flowEventArgs) {
+                            System.out.println(o.toString() + "," + flowEventArgs);
+                        }
+                    });
+
+            // Start the consumer
+            cons.start();
+
+
         } catch (InvalidPropertiesException ipe) {
             System.err.println("Error during session creation: ");
             ipe.printStackTrace();
@@ -99,25 +133,22 @@ public class LoginMessageReplier {
         }
     }
 
-    /**
-     * The LoginRequestHandler class is responsible for implementing the reply to a LoginRequest
-     * @author Thomas Kunnumpurath
-     */
     class LoginRequestHandler implements XMLMessageListener {
 
+        //Create a failure reply with no result
         private XMLMessage createReplyMessage(TextMessage request) throws JCSMPException {
             TextMessage replyMessage = JCSMPFactory.onlyInstance().createMessage(TextMessage.class);
             //Convert the JSon to an Object
-            UserObject userObject = gson.fromJson(request.getText(), UserObject.class);
+            UserObject userObject = gson.fromJson(request.getText(),UserObject.class);
 
             //Validate the user
             boolean validUser = credentialsRepository.isValidUser(userObject.getUsername(), userObject.getPassword());
-            if (validUser)
+            if(validUser)
                 System.out.println("Successfully validated a user");
             else
                 System.out.println("Authentication failed");
             replyMessage.setHTTPContentType("application/json");
-            replyMessage.setText("{\"authenticated\":\"" + validUser + "\"}");
+            replyMessage.setText("{\"authenticated\":\""+validUser+"\"}");
             replyMessage.setApplicationMessageId(request.getApplicationMessageId());
             replyMessage.setDeliverToOne(true);
             replyMessage.setDeliveryMode(DeliveryMode.DIRECT);
@@ -152,10 +183,6 @@ public class LoginMessageReplier {
 
     }
 
-    /**
-     * A class that implements a simple callback that will print the response
-     * @author Thomas Kunnumpurath
-     */
     class PrintingPubCallback implements JCSMPStreamingPublishEventHandler {
         public void handleError(String messageID, JCSMPException cause, long timestamp) {
             System.err.println("Error occurred for message: " + messageID);

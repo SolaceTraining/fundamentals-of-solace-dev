@@ -1,7 +1,7 @@
 # Solace Chat Application Auth Server
-A server that handles login requests and proxies the request through a REST-ful POST to the PubSub+ Software Broker.
+A server that validates login requests.
 
-To run the web-server, type the following command:
+To run the server, type the following command:
 ```
 mvn spring-boot:run
 ```

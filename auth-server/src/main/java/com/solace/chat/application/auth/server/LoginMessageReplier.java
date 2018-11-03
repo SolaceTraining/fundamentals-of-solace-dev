@@ -87,41 +87,7 @@ public class LoginMessageReplier {
             session.connect();
             producer = session.getMessageProducer(new PrintingPubCallback());
 
-            final EndpointProperties endpointProps = new EndpointProperties();
-            // set queue permissions to "consume" and access-type to "exclusive"
-            endpointProps.setPermission(EndpointProperties.PERMISSION_CONSUME);
-            endpointProps.setAccessType(EndpointProperties.ACCESSTYPE_NONEXCLUSIVE);
-
-            // create the queue object locally
-            final Queue queue = JCSMPFactory.onlyInstance().createQueue(QUEUE_NAME);
-            // Actually provision it, and do not fail if it already exists
-            session.provision(queue, endpointProps, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
-
-
-            System.out.printf("Attempting to bind to the queue '%s' on the PubSub+ Broker.%n", QUEUE_NAME);
-            // Create a Flow be able to bind to and consume messages from the Queue.
-            final ConsumerFlowProperties flow_prop = new ConsumerFlowProperties();
-            flow_prop.setEndpoint(queue);
-
-            // set to "auto acknowledge" where the API will ack back to Solace at the
-            // end of the message received callback
-            flow_prop.setAckMode(JCSMPProperties.SUPPORTED_MESSAGE_ACK_AUTO);
-            flow_prop.setActiveFlowIndication(true);
-
-            EndpointProperties endpoint_props = new EndpointProperties();
-            endpoint_props.setAccessType(EndpointProperties.ACCESSTYPE_EXCLUSIVE);
-            // bind to the queue, passing null as message listener for no async callback
-            final FlowReceiver cons = session.createFlow( new LoginRequestHandler()
-                    , flow_prop, endpoint_props, new FlowEventHandler() {
-                        @Override
-                        public void handleEvent(Object o, FlowEventArgs flowEventArgs) {
-                            System.out.println(o.toString() + "," + flowEventArgs);
-                        }
-                    });
-
-            // Start the consumer
-            cons.start();
-
+            //Add the Queue Logic Here
 
         } catch (InvalidPropertiesException ipe) {
             System.err.println("Error during session creation: ");

@@ -88,7 +88,7 @@ public class LoginMessageReplier {
             consumer = session.getMessageConsumer(new LoginRequestHandler());
             producer = session.getMessageProducer(new PrintingPubCallback());
             consumer.start();
-            session.addSubscription(JCSMPFactory.onlyInstance().createTopic(REQUEST_TOPIC), true);
+            //Add the session subscription here
         } catch (InvalidPropertiesException ipe) {
             System.err.println("Error during session creation: ");
             ipe.printStackTrace();
@@ -106,22 +106,7 @@ public class LoginMessageReplier {
     class LoginRequestHandler implements XMLMessageListener {
 
         private XMLMessage createReplyMessage(TextMessage request) throws JCSMPException {
-            TextMessage replyMessage = JCSMPFactory.onlyInstance().createMessage(TextMessage.class);
-            //Convert the JSon to an Object
-            UserObject userObject = gson.fromJson(request.getText(), UserObject.class);
-
-            //Validate the user
-            boolean validUser = credentialsRepository.isValidUser(userObject.getUsername(), userObject.getPassword());
-            if (validUser)
-                System.out.println("Successfully validated a user");
-            else
-                System.out.println("Authentication failed");
-            replyMessage.setHTTPContentType("application/json");
-            replyMessage.setText("{\"authenticated\":\"" + validUser + "\"}");
-            replyMessage.setApplicationMessageId(request.getApplicationMessageId());
-            replyMessage.setDeliverToOne(true);
-            replyMessage.setDeliveryMode(DeliveryMode.DIRECT);
-            return replyMessage;
+        
         }
 
         //Reply to a request

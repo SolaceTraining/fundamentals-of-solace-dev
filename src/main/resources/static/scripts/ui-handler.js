@@ -35,9 +35,6 @@ $(document).ready(function() {
 
     alertHandler(bResult, sMessage);
     if (bResult) {
-      //we connected fine, now try and subscribe
-      broker.subscribe(alertHandler);
-
       broker.consume(alertHandler);
       broker.onQueueMessage(messageHandler);
     }

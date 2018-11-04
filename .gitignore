@@ -1,11 +1,6 @@
-target/
+/target/
 */target
 !.mvn/wrapper/maven-wrapper.jar
-
-### VSCode ###
-.vscode
-bin
-*/bin
 
 ### STS ###
 .apt_generated
@@ -15,6 +10,10 @@ bin
 .settings
 .springBeans
 .sts4-cache
+
+### vs-code ###
+.vscode
+bin
 
 ### IntelliJ IDEA ###
 .idea
@@ -29,3 +28,11 @@ bin
 /dist/
 /nbdist/
 /.nb-gradle/
+
+###solace libs
+src/main/resources/static/lib/
+src/main/resources/static/resources/application-properties.js
+src/main/resources/application.properties
+*/src/main/resources/static/lib/
+*/src/main/resources/static/resources/application-properties.js
+*/src/main/resources/application.properties

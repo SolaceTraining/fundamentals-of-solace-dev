@@ -113,8 +113,10 @@ public class LoginMessageReplier {
                 System.out.println("Successfully validated a user");
             else
                 System.out.println("Authentication failed");
+            AuthenticatedObject authenticatedObject = new AuthenticatedObject();
+            authenticatedObject.setAuthenticated(validUser);
             replyMessage.setHTTPContentType("application/json");
-            replyMessage.setText("{\"authenticated\":\""+validUser+"\"}");
+            replyMessage.setText(gson.toJson(authenticatedObject));
             replyMessage.setApplicationMessageId(request.getApplicationMessageId());
             replyMessage.setDeliverToOne(true);
             replyMessage.setDeliveryMode(DeliveryMode.DIRECT);

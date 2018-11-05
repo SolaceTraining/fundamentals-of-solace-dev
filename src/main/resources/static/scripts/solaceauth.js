@@ -9,27 +9,5 @@
  * @param {oResultCallback} oResultCallback - callback function to execute on success or failure events.
  */
 function authenticate(sUsername, sPassword, oResultCallback) {
-    'use strict';
-
-    var serverUrl = 'http://localhost:8081/solace/cloud/proxy',
-        jsonBody = {
-            username: sUsername,
-            password: sPassword
-        };
-
-    fetch(serverUrl, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json; charset=utf-8",
-        },
-        body: JSON.stringify(jsonBody)
-    })
-        .then(function (response) {
-            console.debug(response);
-            if (response.ok) {
-                oResultCallback(true);
-            } else {
-                oResultCallback(false);
-            }
-        });
+   
 }

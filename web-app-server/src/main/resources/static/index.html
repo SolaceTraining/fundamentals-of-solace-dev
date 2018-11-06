@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Solace Chat</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+
+  <!--Internal Scripts -->
+  <script src="resources/application-properties.js"></script>
+  <script src="lib/solclient.js"></script>
+  <script src="scripts/pubsubplusbroker.js"></script>
+  <script src="scripts/ui-handler.js"></script>
+  <script src="scripts/solaceauth.js"></script>
+  <script src="resources/application-properties.js"></script>
+
+  <script>
+    $(document).ready(function() {
+      $("#chat-area").hide();
+     function authResult(bResult){
+
+       if(bResult){
+         $("#chat-area").show();
+         $("#chatUser").text($("#username").val());
+         $("#login-area").hide();
+         connectToSolace();
+       }else{
+         //create an empty div to be used for alerting
+         //assign it our alert message
+         var $div = $("<div></div>");
+         $div.text("Login Failed");
+         $div.addClass("alert alert-danger");
+         //add in our alert and have it fade out
+         //in 5s.
+         $("#alerts").append($div);
+         $div.fadeOut(5000);
+       }
+     }
+    $("#btnLogin").click(function() {
+         var sUsername=$("#username").val();
+         var sPassword=$("#password").val();
+         authenticate(sUsername,sPassword,authResult);
+    })
+    });
+  </script>
+</head>
+
+<body class="bg-secondary">
+
+<div id="login-area">
+<div class=" w-25 mx-auto border-0">
+  <img src="resources/Solace_Logo_Green_360x100.png" class="rounded pb-3" width="30%" height="30%"/>
+</div>
+<div class="card w-25 mx-auto">
+  <div class="card-header text-center">
+    Login
+  </div>
+  <div class="card-body">
+    <form>
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" class="form-control" id="username"placeholder="Enter username">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" class="form-control" id="password" placeholder="Password">
+      </div>
+      <button type="button" id="btnLogin" class="btn btn-primary float-right">Submit</button>
+    </form>
+  </div>
+</div>
+</div>
+  <div class="container pt-5" id="chat-area" >
+    <img src="resources/Solace_Logo_Green_360x100.png" class="rounded pb-3" width="10%" height="10%"/>
+    <form>
+      <div class="form-group">
+        <div class="mb-1">
+          <textarea name="chatArea" class="form-control" id="chatArea" rows="15" disabled=true></textarea>
+        </div>
+        <div class="input-group mb-5">
+          <span id="chatUser"></span>:<input type="text" class="form-control" id="chatInput" name="chatInput" placeholder="Enter your text here...">
+          <div class="input-group-append">
+            <button class="btn btn-primary" type="button" id="buttonSend">&gt;</button>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+<div id="alerts">
+</div>
+</body>
+
+</html>

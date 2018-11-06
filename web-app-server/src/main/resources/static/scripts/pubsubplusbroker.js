@@ -191,9 +191,7 @@ class PubSubPlusBroker {
          *-CorrelationKey that is used in events
          *-How long to block the execution thread, in milliseconds
          */
-        this.broker.session.subscribe(
-          // add subscription 
-        );
+        
       } catch (error) {
         console.error("Could not subscribe to topic. ->" + error.message);
       }

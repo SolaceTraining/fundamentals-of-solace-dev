@@ -46,10 +46,18 @@ $(document).ready(function() {
   function messageHandler(sMessage) {
     console.debug("message handler called with text: " + sMessage);
     updateChatArea("Broker: " + sMessage);
-
     return;
   }
 
+
+  $('#chatInput').keypress(function (e) {
+    var key = e.which;
+    if(key == 13)  // the enter key code
+     {
+       $('#buttonSend').click();
+       return false;  
+     }
+   });   
 
   /***EVENT HANDLERS***/
   /*

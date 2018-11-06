@@ -4,5 +4,6 @@ connectOptions = {
 	sUSERNAME: '',
 	sPASSWORD: '',
 	sPublishTopic: '',
-	sSubscribeTopic: ''
+	sSubscribeTopic: '',
+	sReceiveQueue: ''
 }

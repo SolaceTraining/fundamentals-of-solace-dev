@@ -5,8 +5,6 @@ The web-app is hosted under \src\main\resources\static\
 
 The Spring Boot server side code is hosted under \src\main\java\
 
-Code is added here to proxy REST-ful requests to Solace
-
 To run the web-server, type the following command:
 ```
 mvn spring-boot:run

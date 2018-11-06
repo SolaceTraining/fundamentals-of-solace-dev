@@ -1,14 +1,9 @@
-# Solace Chat Application Web Server
+# Solace Chat Application - Developer Exercise 3
 This project use Spring-Boot to start up a WebServer and contains a web app for chat.
-
-The web-app is hosted under \src\main\resources\static\
-
-The Spring Boot server side code is hosted under \src\main\java\
-
-Code is added here to proxy REST-ful requests to Solace
 
 To run the web-server, type the following command:
 ```
+cd web-app-server
 mvn spring-boot:run
 ```
 

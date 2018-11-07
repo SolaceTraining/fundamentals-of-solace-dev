@@ -9,5 +9,27 @@
  * @param {oResultCallback} oResultCallback - callback function to execute on success or failure events.
  */
 function authenticate(sUsername, sPassword, oResultCallback) {
-   
+    'use strict';
+
+    // Enter serverUrl
+    var serverUrl = '', 
+    jsonBody = {
+        username: sUsername,
+        password: sPassword
+    };
+
+    // Complete fetch parameters; method and headers
+    fetch(serverUrl, {
+        method: "",
+        headers: {},
+        body: JSON.stringify(jsonBody)        
+    })
+        .then(function (response) {
+            console.debug(response);
+            if (response.ok) {
+                oResultCallback(true);
+            } else {
+                oResultCallback(false);
+            }
+        });
 }

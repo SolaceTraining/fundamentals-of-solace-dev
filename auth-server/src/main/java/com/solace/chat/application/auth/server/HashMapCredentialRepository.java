@@ -13,9 +13,9 @@ public class HashMapCredentialRepository implements ICredentialsRepository {
 
     public HashMapCredentialRepository(){
         credentialsMap = new HashMap<>();
-        credentialsMap.put("Leah","solace");
-        credentialsMap.put("Ush","solace");
-        credentialsMap.put("Thomas","solace");
+        credentialsMap.put("ValidUser","solace");
+        credentialsMap.put("SolaceUser","solace");
+        credentialsMap.put("TestUser","solace");
     }
 
     @Override

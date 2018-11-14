@@ -88,6 +88,34 @@ public class LoginMessageReplier {
             producer = session.getMessageProducer(new PrintingPubCallback());
 
             //Add the Queue Logic Here
+            final EndpointProperties endpointProps = new EndpointProperties();
+            //Set queue permissions to 'consume' and access type to 'non-exclusive'
+            endpointProps.setPermission(EndpointProperties.PERMISSION_CONSUME);
+            endpointProps.setAccessType(EndpointProperties.ACCESSTYPE_NONEXCLUSIVE);
+
+            //Create the queue object locally
+            final Queue queue = JCSMPFactory.onlyInstance().createQueue(QUEUE_NAME);
+            //Actually provision the queue, and do not fail if it already exists
+            session.provision(queue, endpointProps, JCSMPSession.FLAG_IGNORE_ALREADY_EXISTS);
+
+            System.out.printf("Attempting to bind to the queue '%s' on the PubSub+ Broker.%n", QUEUE_NAME);
+            //Create a Flow be able to bind to and consume messages from the Queue
+            final ConsumerFlowProperties flowProps = new ConsumerFlowProperties();
+            flowProps.setEndpoint(queue);
+            //Set to 'auto acknowledge' where the API will ack back to Solace at the end of the
+            // message received callback
+            flowProps.setAckMode(JCSMPProperties.SUPPORTED_MESSAGE_ACK_AUTO);
+            
+            final FlowReceiver cons = session.createFlow( new LoginRequestHandler(),
+                flowProps, endpointProps, new FlowEventHandler() {
+                    @Override
+                    public void handleEvent(Object o, FlowEventArgs flowEventArgs) {
+                        System.out.println(o.toString() + "," + flowEventArgs);
+                    }
+                });
+
+            //Start the consumer
+            cons.start();
 
         } catch (InvalidPropertiesException ipe) {
             System.err.println("Error during session creation: ");

@@ -20,3 +20,10 @@ mvn spring-boot:run
 ```
 mvn spring-boot:run
 ```
+
+* Complete publish/subscribe code in pubsubplusbroker.js
+* Rerun web-server, send a message
+
+```
+mvn spring-boot:run
+```

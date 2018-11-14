@@ -3,6 +3,7 @@ This project uses Spring-Boot to start up a WebServer and contains a skeleton we
 
 * Download the solclientjs javascript libraries 
 * Place the solclientjs /lib directory under web-app-server/src/main/resources/static/
+* Copy and rename application-template.properties to application.properties
 
 To run the web-server, type the following command:
 
@@ -12,7 +13,7 @@ mvn spring-boot:run
 ```
 
 * Navigate to http://localhost:8081/ to bring up the chat application; notice the error in the Inspect Elements console
-* Copy and rename application-template.properties to application.properties
+* Copy and rename application-properties-template.js to application-properties.js
 * Fill in PubSub+ instance web messaging connection details
 * Rerun web-server, and ensure no error message in Inspect Elements console
 

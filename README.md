@@ -4,6 +4,7 @@ This project uses Spring-Boot to start up a WebServer and contains a skeleton we
 * Download the solclientjs javascript libraries 
 * Place the solclientjs /lib directory under web-app-server/src/main/resources/static/
 * Copy and rename application-template.properties to application.properties
+* Change directory `cd src`
 
 To run the web-server, type the following command:
 
